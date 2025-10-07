@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PIET Random Student Generator</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #89f7fe, #66a6ff);
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        color: #333;
+    }
+
+    h1 {
+        background-color: #004aad;
+        color: white;
+        padding: 20px;
+        margin: 0;
+        letter-spacing: 1px;
+    }
+
+    table {
+        margin: 30px auto;
+        border-collapse: collapse;
+        width: 90%;
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    th {
+        background-color: #004aad;
+        color: white;
+        padding: 12px;
+        font-size: 18px;
+    }
+
+    td {
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #d6e4ff;
+        transition: 0.3s;
+    }
+
+    button {
+        padding: 12px 20px;
+        background-color: #ff5722;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 10px;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background-color: #e64a19;
+    }
+
+    input[type="number"] {
+        padding: 10px;
+        width: 80px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+    #selected {
+        background-color: #00bfa5;
+        color: black;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px;
+        border-radius: 8px;
+        width: 60%;
+        margin: 20px auto;
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+</style>
+</head>
+<body>
+
+<h1>🎯 PIET Random Student Selector</h1>
+
+<div>
+    <label for="numStudents"><strong>Number of Students:</strong></label>
+    <input type="number" id="numStudents" min="1" max="10" value="1">
+    <button onclick="generateRandomStudents()">🎲 Pick Students</button>
+</div>
+
+<div id="selected"></div>
+
+<!-- <table id="studentTable">
+    <thead>
+        <tr>
+            <th>Reg. No.</th>
+            <th>Name</th>
+            <th>Assigned Number</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table> -->
+
+<script>
+const students = [
+    ["PIET24CA001","AARYAN SHARMA"],
+    ["PIET24CA002","ABHISHEK KUMAWAT"],
+    ["PIET24CA003","ADITI SINGH"],
+    ["PIET24CA004","ANANYA GOYAL"],
+    ["PIET24CA005","ANKITA"],
+    ["PIET24CA006","ANSHUL KUMAR"],
+    ["PIET24CA007","ASHUTOSH JOSHI"],
+    ["PIET24CA008","BHARTI KANWAR"],
+    ["PIET24CA009","BHAVISHYA SHARMA"],
+    ["PIET24CA010","BHUMIKA KABRA"],
+    ["PIET24CA011","CHIRAYU JAIN"],
+    ["PIET24CA012","DHEERAJ CHELANI"],
+    ["PIET24CA013","DHEERAJ PRAJAPATI"],
+    ["PIET24CA014","DIWAKAR SAXENA"],
+    ["PIET24CA015","EKAGRA SHARMA"],
+    ["PIET24CA016","GAURANG SHARMA"],
+    ["PIET24CA018","GITIKA"],
+    ["PIET24CA019","GOURANGI SHARMA"],
+    ["PIET24CA020","HARSHIT KUMAR VASHISHTHA"],
+    ["PIET24CA021","HARSHJEET SINGH"],
+    ["PIET24CA022","HARSHVARDHAN SINGH RATHORE"],
+    ["PIET24CA023","HEMANI NIHALANI"],
+    ["PIET24CA025","HITESH KHANCHANDANI"],
+    ["PIET24CA026","JATIN CHAUHAN"],
+    ["PIET24CA027","JAYANSH JAIMINEE"],
+    ["PIET24CA028","KIRTNA VAISHNAV"],
+    ["PIET24CA029","KOUSHAL JOSHI"],
+    ["PIET24CA030","KOUSTUBH MUDGAL"],
+    ["PIET24CA031","KULDEEP SINGH"],
+    ["PIET24CA032","LAKSHAY NIRBAN"],
+    ["PIET24CA033","MANDHATTA SHEKHAWAT"],
+    ["PIET24CA034","MOHAMMAD SHAHID"],
+    ["PIET24CA035","MOHIT TAILOR"],
+    ["PIET24CA036","NITESH CHOUDHARY"],
+    ["PIET24CA037","NITIN SAINI"],
+    ["PIET24CA038","PINAK DAVE"],
+    ["PIET24CA039","PRIYANSH GUPTA"],
+    ["PIET24CA040","PRIYANSH SHARMA"],
+    ["PIET24CA041","PULKIT SHRIVASTAVA"],
+    ["PIET24CA042","RAHUL DANGI"],
+    ["PIET24CA043","RESHPAL SINGH BHATI"],
+    ["PIET24CA044","RIMJHIM ROCHWANI"],
+    ["PIET24CA045","RITIKA JANGID"],
+    ["PIET24CA046","RONAK"],
+    ["PIET24CA047","RUDRAKSH SHARMA"],
+    ["PIET24CA048","SAGAR SHARMA"],
+    ["PIET24CA049","SAKSHAM AGARWAL"],
+    ["PIET24CA050","SANGRAM SINGH RATHORE"],
+    ["PIET24CA051","SARASWAT DIVYA SHANKAR"],
+    ["PIET24CA052","SEJAL GUPTA"],
+    ["PIET24CA053","SHAURYA PURVA"],
+    ["PIET24CA054","SHIVAM DADHICH"],
+    ["PIET24CA055","SHIVANG SHARMA"],
+    ["PIET24CA056","SHUBHAM SHARMA"],
+    ["PIET24CA057","SIDDHARTH BHARGAVA"],
+    ["PIET24CA058","SORAV SINGH"],
+    ["PIET24CA059","SUDHANSHU SHANDILYA"],
+    ["PIET24CA060","UMESH JANGID"],
+    ["PIET24CA061","UMESH YADAV"],
+    ["PIET24CA062","VIMRIDH SHARMA"],
+    ["PIET24CA063","YASH KUMAWAT"],
+    ["PIET24CA064","HARSH PRATAP"],
+    ["PIET24CI036","SHREYA GARG"]
+];
+
+// Assign random numbers 1–n
+students.forEach((s, i) => s.push(i + 1));
+
+// Display all students
+function loadTable() {
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+    students.forEach(student => {
+        let row = `<tr>
+            <td>${student[0]}</td>
+            <td>${student[1]}</td>
+            <td>${student[2]}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+    });
+}
+
+// Pick N random unique students
+function generateRandomStudents() {
+    const count = parseInt(document.getElementById("numStudents").value);
+    if (count < 1 || count > students.length) {
+        alert("Please enter a valid number of students!");
+        return;
+    }
+
+    const selectedIndexes = [];
+    while (selectedIndexes.length < count) {
+        let index = Math.floor(Math.random() * students.length);
+        if (!selectedIndexes.includes(index)) {
+            selectedIndexes.push(index);
+        }
+    }
+
+    const selectedDiv = document.getElementById("selected");
+    selectedDiv.innerHTML = "<h3>🎯 Selected Students</h3>";
+    selectedIndexes.forEach(i => {
+        const s = students[i];
+        selectedDiv.innerHTML += `
+            <div>🔹 <strong>Random No: — ${s[2]} ${s[1]}</strong> (${s[0]})</div>
+        `;
+    });
+
+    selectedDiv.style.display = "block";
+}
+
+// loadTable();
+</script>
+
+</body>
+</html>
